@@ -49,7 +49,7 @@ public class PacketParser {
         final short crc2Actual = CRC16.evaluateCRC(message, 0, messageLength);//count control sum
 
         if (crc2 != crc2Actual) {
-            throw new CRC2Exception("Input CRC2. Actual: " + crc1Actual + ", but was: " + crc1);
+            throw new CRC2Exception("Input CRC2. Actual: " + crc1Actual + ", but was: " + crc2);
         }
 
         //message parser
@@ -61,56 +61,33 @@ public class PacketParser {
 
         //our useful info
         byte[] usefulInfo = new byte[messageLength - 8];
-        System.arraycopy(message, 8, usefulInfo, 0, messageLength-8);
+        System.arraycopy(message, 8, usefulInfo, 0, messageLength - 8);
         System.out.println("Useful information: " + new String(usefulInfo, StandardCharsets.UTF_8));
 
 
-
     }
-
-    //масив байтів який відправляємо у відповідь
-    public static byte[] buildResponse() {
-
-        final String response = "response from server";
-        final byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
-
-        final byte[] header = new byte[]{
-                0x13,
-                0x0,
-                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x16,
-                0x0, 0x0, 0x0, (byte) bytes.length
-
-        };
-
-
-        return ByteBuffer.allocate(14 + 2 + bytes.length + 2)
-                .put(header)
-                .putShort(CRC16.evaluateCRC(header, 0, header.length))
-                .put(bytes)
-                .putShort(CRC16.evaluateCRC(bytes, 0, header.length))
-                .array();
-    }
-
 
 
     public static void main(String[] args) throws DecoderException, MagicByteException, CRC1Exception, CRC2Exception {
+
+        CreatePacket createPacket = new CreatePacket();
 
 //        final String plainText = "My plain t";
 //        final byte[] plainBytes = plainText.getBytes(StandardCharsets.UTF_8);
 //        packetParser(decodeHex(("13 00 0000101000000001 0000000A 4163" + Hex.encodeHexString(plainBytes) + " 0B3F").replace(" ", "")));
 //
 //        System.out.println("response from server:");
-//        packetParser(buildResponse());
+        packetParser(createPacket.createPacket());
 
         //example for crc1
-        packetParser(new byte[]{
-                0x13,
-                0xB,
-                0x0, 0x0, 0x1, 0x1, 0x0, 0x41, 0x15, 0x00,
-                0x0, 0x0, 0x0, 0x04,
-                0x0F, 0x06
-
-        });
+//        packetParser(new byte[]{
+//                0x13,
+//                0xB,
+//                0x0, 0x0, 0x1, 0x1, 0x0, 0x41, 0x15, 0x00,
+//                0x0, 0x0, 0x0, 0x04,
+//                0x0F, 0x06
+//
+//        });
 
     }
 }
