@@ -11,11 +11,7 @@ public class CreatePacket {
     private final static int USERID = 2;
     private final static String MESSAGENEED = "Hello, nice to see you";
 
-    public static String createMessage() {
-
-//    public static void createMessage() {
-
-
+    public static String encryptMessage() {
         //encrypt message
         final String secretKey = "fifi!fifi!!";
 
@@ -26,9 +22,17 @@ public class CreatePacket {
         //        String decryptedString = AES.decrypt(encryptedString, secretKey);
         //        System.out.println(decryptedString);
 
+        return encryptedString;
 
+    }
+
+    public static String createMessage() {
+
+//    public static void createMessage() {
+
+        encryptMessage();
         // string to array byte
-        final byte[] byteArrayString = encryptedString.getBytes(StandardCharsets.UTF_8);
+        final byte[] byteArrayString = CreatePacket.encryptMessage().getBytes(StandardCharsets.UTF_8);
         System.out.println("Convert string to byte array: " + Arrays.toString(byteArrayString));
 
         //create all message
@@ -81,9 +85,9 @@ public class CreatePacket {
     public static void main(String[] args) {
 
         createMessage();
-        
+
         //System.out.println("Length of all message: " + CreatePacket.createMessage().length());
-        
+
         createPacket();
     }
 
