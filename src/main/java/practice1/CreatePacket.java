@@ -11,7 +11,7 @@ public class CreatePacket {
     private final static int USERID = 2;
     private final static String MESSAGENEED = "Hello, nice to see you";
 
-    public static byte[] createMessage() {
+    public static String createMessage() {
 
 //    public static void createMessage() {
 
@@ -37,44 +37,56 @@ public class CreatePacket {
                 .putInt(CreatePacket.USERID)
                 .put(byteArrayString).array();
 
-        System.out.println("Create unique message ready: " + bbMessage);
 
-        return bbMessage;
+        String response = Arrays.toString(bbMessage);
+
+        String[] byteValues = response.substring(1, response.length() - 1).split(",");
+        byte[] bytes = new byte[byteValues.length];
+
+        for (int i = 0, len = bytes.length; i < len; i++) {
+            bytes[i] = Byte.parseByte(byteValues[i].trim());
+        }
+
+        String str = new String(bytes);
+
+        System.out.println("Create unique message ready: " + str);
+
+        return str;
 
 
     }
 
     //public static void createPacket() {
-
-    public static byte[] createPacket() {
-
-        final byte[] bytes = CreatePacket.createMessage();
-        System.out.println(bytes);
-
-        final byte[] header = new byte[]{
-                0x13,
-                0x0,
-                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x16,
-                0x0, 0x0, 0x0, (byte) bytes.length
-
-        };
-
-       // byte[]
-
-
-        return ByteBuffer.allocate(14 + 2 + bytes.length + 2)
-                .put(header)
-                .putShort(CRC16.evaluateCRC(header, 0, header.length))
-                .put(bytes)
-                .putShort(CRC16.evaluateCRC(bytes, 0, header.length))
-                .array();
-    }
+//
+//    public static byte[] createPacket() {
+//
+//        final byte[] bytes = CreatePacket.createMessage();
+//        System.out.println(bytes);
+//
+//        final byte[] header = new byte[]{
+//                0x13,
+//                0x0,
+//                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x16,
+//                0x0, 0x0, 0x0, (byte) bytes.length
+//
+//        };
+//
+//        // byte[]
+//
+//
+//        return ByteBuffer.allocate(14 + 2 + bytes.length + 2)
+//                .put(header)
+//                .putShort(CRC16.evaluateCRC(header, 0, header.length))
+//                .put(bytes)
+//                .putShort(CRC16.evaluateCRC(bytes, 0, header.length))
+//                .array();
+//    }
 
 
     public static void main(String[] args) {
 
-        // createMessage();
-        createPacket();
+        createMessage();
+        //createPacket();
     }
 
 
