@@ -9,7 +9,7 @@ public class CreatePacket {
 
     private final static int TYPEID = 1;
     private final static int USERID = 2;
-    private final static String MESSAGENEED = "Hello gear friend";
+    private final static String MESSAGENEED = "Hello dear friend";
 
     public static String encryptMessage() {
         //encrypt message
