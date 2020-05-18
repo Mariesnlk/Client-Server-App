@@ -7,15 +7,6 @@ import static org.apache.commons.codec.binary.Hex.decodeHex;
 
 public class TestMain {
 
-//    @Test
-//    public void trueWhenValidPacket() throws DecoderException, CRC1Exception, CRC2Exception, MagicByteException {
-//        final String plainText = "My plain t";
-//        final byte[] plainBytes = plainText.getBytes(StandardCharsets.UTF_8);
-//        Main.packetParser(decodeHex(("13 00 0000101000000001 0000000A 4163" + Hex.encodeHexString(plainBytes) + " 0B3F").replace(" ", "")));
-//
-//    }
-
-
     @Test(expected = MagicByteException.class)
     public void failWhatValidMagicByte() throws DecoderException, MagicByteException, CRC1Exception, CRC2Exception {
         PacketParser.packetParser(decodeHex(("12")));
@@ -43,5 +34,10 @@ public class TestMain {
         });
     }
 
+    @Test(expected = CRC2Exception.class)
+    public void failCountControlSumCRC2() throws CRC1Exception, CRC2Exception, MagicByteException {
+        CreatePacket createPacket = new CreatePacket();
+        PacketParser.packetParser(createPacket.createPacket());
+    }
 
 }
