@@ -12,7 +12,7 @@ public class TestMain {
         PacketParser.packetParser(decodeHex(("12")));
     }
 
-    @Test
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
     public void workWhatValidMagicByte() throws DecoderException, MagicByteException, CRC1Exception, CRC2Exception {
         PacketParser.packetParser(decodeHex(("13")));
     }
@@ -22,7 +22,7 @@ public class TestMain {
         PacketParser.packetParser(decodeHex(("13 01 00000000000000000A 00000100 022C").replace(" ", "")));
     }
 
-    @Test
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
     public void workCountControlSumCRC1() throws CRC1Exception, CRC2Exception, MagicByteException {
         PacketParser.packetParser(new byte[]{
                 0x13,
@@ -39,5 +39,36 @@ public class TestMain {
         CreatePacket createPacket = new CreatePacket();
         PacketParser.packetParser(createPacket.createPacket());
     }
+
+    @Test
+    public void workSetKey() {
+        final String secretKey = "fifi!fifi!!";
+        AES.setKey(secretKey);
+
+    }
+
+
+    @Test(expected = NullPointerException.class)
+    public void failSetKey() {
+        final String secretKey = null;
+        AES.setKey(secretKey);
+
+    }
+
+    @Test
+    public void failEncrypt() {
+        final String secretKey = "fi";
+        String originalString = null;
+        AES.encrypt(originalString, secretKey);
+    }
+
+    @Test
+    public void failDecrypt(){
+        final String secretKey = null;
+        String originalString = "Hello my dear friend";
+        AES.decrypt(originalString, secretKey);
+
+    }
+
 
 }
