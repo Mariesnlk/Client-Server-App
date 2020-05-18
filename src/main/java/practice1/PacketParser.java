@@ -1,13 +1,8 @@
 package practice1;
 
-import org.apache.commons.codec.DecoderException;
-
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
-
-import static org.apache.commons.codec.binary.Hex.decodeHex;
 
 public class PacketParser {
 
@@ -80,21 +75,10 @@ public class PacketParser {
     }
 
 
-    public static void main(String[] args) throws DecoderException, MagicByteException, CRC1Exception, CRC2Exception {
+    public static void main(String[] args) throws MagicByteException, CRC1Exception, CRC2Exception {
 
         CreatePacket createPacket = new CreatePacket();
         packetParser(createPacket.createPacket());
-
-
-        //example for crc1
-//        packetParser(new byte[]{
-//                0x13,
-//                0xB,
-//                0x0, 0x0, 0x1, 0x1, 0x0, 0x41, 0x15, 0x00,
-//                0x0, 0x0, 0x0, 0x04,
-//                0x0F, 0x06
-//
-//        });
-
+        
     }
 }
