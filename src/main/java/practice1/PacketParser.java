@@ -43,14 +43,14 @@ public class PacketParser {
         System.out.println("Input message: " + new String(message, StandardCharsets.UTF_8));
 
 
-        final short crc2 = ByteBuffer.wrap(inputMessage, 16 + messageLength, 2).order(ByteOrder.BIG_ENDIAN).getShort();
-        System.out.println("CRC2: " + crc2);
-
-        final short crc2Actual = CRC16.evaluateCRC(message, 0, messageLength);//count control sum
-
-        if (crc2 != crc2Actual) {
-            throw new CRC2Exception("Input CRC2. Actual: " + crc1Actual + ", but was: " + crc2);
-        }
+//        final short crc2 = ByteBuffer.wrap(inputMessage, 16 + messageLength, 2).order(ByteOrder.BIG_ENDIAN).getShort();
+//        System.out.println("CRC2: " + crc2);
+//
+//        final short crc2Actual = CRC16.evaluateCRC(message, 0, messageLength);//count control sum
+//
+//        if (crc2 != crc2Actual) {
+//            throw new CRC2Exception("Input CRC2. Actual: " + crc2Actual + ", but was: " + crc2);
+//        }
 
         //message parser
         final int typeID = ByteBuffer.wrap(message, 0, 4).order(ByteOrder.BIG_ENDIAN).getInt();
@@ -64,6 +64,18 @@ public class PacketParser {
         System.arraycopy(message, 8, usefulInfo, 0, messageLength - 8);
         System.out.println("Useful information: " + new String(usefulInfo, StandardCharsets.UTF_8));
 
+        decryptMessage();
+
+    }
+
+    public static String decryptMessage() {
+        //decrypt message
+        final String secretKey = "fifi!fifi!!";
+
+        String decryptedString = AES.decrypt(CreatePacket.encryptMessage(), secretKey);
+        System.out.println("Decrypted unique message is: " + decryptedString);
+
+        return decryptedString;
 
     }
 
@@ -71,13 +83,8 @@ public class PacketParser {
     public static void main(String[] args) throws DecoderException, MagicByteException, CRC1Exception, CRC2Exception {
 
         CreatePacket createPacket = new CreatePacket();
-
-//        final String plainText = "My plain t";
-//        final byte[] plainBytes = plainText.getBytes(StandardCharsets.UTF_8);
-//        packetParser(decodeHex(("13 00 0000101000000001 0000000A 4163" + Hex.encodeHexString(plainBytes) + " 0B3F").replace(" ", "")));
-//
-//        System.out.println("response from server:");
         packetParser(createPacket.createPacket());
+
 
         //example for crc1
 //        packetParser(new byte[]{
