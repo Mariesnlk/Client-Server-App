@@ -68,6 +68,30 @@ public class PacketParser {
 
     }
 
+    //масив байтів який відправляємо у відповідь
+    public static byte[] buildResponse() {
+
+        final String response = "response from server";
+        final byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
+
+        final byte[] header = new byte[]{
+                0x13,
+                0x0,
+                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x16,
+                0x0, 0x0, 0x0, (byte) bytes.length
+
+        };
+
+
+        return ByteBuffer.allocate(14 + 2 + bytes.length + 2)
+                .put(header)
+                .putShort(CRC16.evaluateCRC(header, 0, header.length))
+                .put(bytes)
+                .putShort(CRC16.evaluateCRC(bytes, 0, header.length))
+                .array();
+    }
+
+
 
     public static void main(String[] args) throws DecoderException, MagicByteException, CRC1Exception, CRC2Exception {
 
