@@ -56,37 +56,35 @@ public class CreatePacket {
 
     }
 
-    //public static void createPacket() {
-//
-//    public static byte[] createPacket() {
-//
-//        final byte[] bytes = CreatePacket.createMessage();
-//        System.out.println(bytes);
-//
-//        final byte[] header = new byte[]{
-//                0x13,
-//                0x0,
-//                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x16,
-//                0x0, 0x0, 0x0, (byte) bytes.length
-//
-//        };
-//
-//        // byte[]
-//
-//
-//        return ByteBuffer.allocate(14 + 2 + bytes.length + 2)
-//                .put(header)
-//                .putShort(CRC16.evaluateCRC(header, 0, header.length))
-//                .put(bytes)
-//                .putShort(CRC16.evaluateCRC(bytes, 0, header.length))
-//                .array();
-//    }
+    public static byte[] createPacket() {
+
+        final String response = CreatePacket.createMessage();
+        final byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
+
+        final byte[] header = new byte[]{
+                0x13,
+                0x0,
+                0x0, 0x0, 0x0, 0x1, 0x1, 0x1, 0x1, 0x10,
+                0x0, 0x0, 0x0, (byte) CreatePacket.createMessage().length()
+
+        };
+
+        return ByteBuffer.allocate(14 + 2 + CreatePacket.createMessage().length() + 2)
+                .put(header)
+                .putShort(CRC16.evaluateCRC(header, 0, header.length))
+                .put(bytes)
+                .putShort(CRC16.evaluateCRC(bytes, 0, header.length))
+                .array();
+    }
 
 
     public static void main(String[] args) {
 
         createMessage();
-        //createPacket();
+        
+        //System.out.println("Length of all message: " + CreatePacket.createMessage().length());
+        
+        createPacket();
     }
 
 
