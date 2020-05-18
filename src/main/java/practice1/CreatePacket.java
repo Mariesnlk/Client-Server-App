@@ -9,7 +9,7 @@ public class CreatePacket {
 
     private final static int TYPEID = 1;
     private final static int USERID = 2;
-    private final static String MESSAGENEED = "Hello, nice to see you";
+    private final static String MESSAGENEED = "Hello gear friend";
 
     public static String encryptMessage() {
         //encrypt message
@@ -17,10 +17,8 @@ public class CreatePacket {
 
         String originalString = CreatePacket.MESSAGENEED;
         String encryptedString = AES.encrypt(originalString, secretKey);
-        System.out.println(originalString);
-        System.out.println(encryptedString);
-        //        String decryptedString = AES.decrypt(encryptedString, secretKey);
-        //        System.out.println(decryptedString);
+        System.out.println("Original unique message is: " + originalString);
+        System.out.println("Encrypted unique message is: " + encryptedString);
 
         return encryptedString;
 
@@ -28,7 +26,6 @@ public class CreatePacket {
 
     public static String createMessage() {
 
-//    public static void createMessage() {
 
         encryptMessage();
         // string to array byte
@@ -67,9 +64,10 @@ public class CreatePacket {
 
         final byte[] header = new byte[]{
                 0x13,
-                0x0,
-                0x0, 0x0, 0x0, 0x1, 0x1, 0x1, 0x1, 0x10,
+                0x1,
+                0x0, 0x0, 0x0, 0x0, 0x7, 0x3, 0x4, 0xB,
                 0x0, 0x0, 0x0, (byte) CreatePacket.createMessage().length()
+
 
         };
 
