@@ -6,8 +6,6 @@ import java.nio.charset.StandardCharsets;
 
 public class PacketParser {
 
-
-    //прийняти масив байт і відправити
     public static void packetParser(final byte[] inputMessage) throws MagicByteException, CRC1Exception, CRC2Exception {
 
         if (inputMessage[0] != 0x13) {
@@ -38,14 +36,14 @@ public class PacketParser {
         System.out.println("Input message: " + new String(message, StandardCharsets.UTF_8));
 
 
-//        final short crc2 = ByteBuffer.wrap(inputMessage, 16 + messageLength, 2).order(ByteOrder.BIG_ENDIAN).getShort();
-//        System.out.println("CRC2: " + crc2);
-//
-//        final short crc2Actual = CRC16.evaluateCRC(message, 0, messageLength);//count control sum
-//
-//        if (crc2 != crc2Actual) {
-//            throw new CRC2Exception("Input CRC2. Actual: " + crc2Actual + ", but was: " + crc2);
-//        }
+        final short crc2 = ByteBuffer.wrap(inputMessage, 16 + messageLength, 2).order(ByteOrder.BIG_ENDIAN).getShort();
+        System.out.println("CRC2: " + crc2);
+
+        final short crc2Actual = CRC16.evaluateCRC(message, 0, messageLength);//count control sum
+
+        if (crc2 != crc2Actual) {
+            throw new CRC2Exception("Input CRC2. Actual: " + crc2Actual + ", but was: " + crc2);
+        }
 
         //message parser
         final int typeID = ByteBuffer.wrap(message, 0, 4).order(ByteOrder.BIG_ENDIAN).getInt();
